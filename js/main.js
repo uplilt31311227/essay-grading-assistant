@@ -11,22 +11,19 @@ const gradingForm = document.getElementById('grading-form');
 const resultSection = document.getElementById('result-section');
 const resultContent = document.getElementById('result-content');
 
-// File upload elements
+// File upload elements (topic only)
 const topicFileInput = document.getElementById('topic-file');
 const topicUploadArea = document.getElementById('topic-upload-area');
 const topicPreview = document.getElementById('topic-preview');
 const topicFilename = document.getElementById('topic-filename');
 const topicContent = document.getElementById('topic-content');
 
-const essayFileInput = document.getElementById('essay-file');
-const essayUploadArea = document.getElementById('essay-upload-area');
-const essayPreview = document.getElementById('essay-preview');
-const essayFilename = document.getElementById('essay-filename');
-const essayContentPreview = document.getElementById('essay-content-preview');
+// Essay text input
+const essayContent = document.getElementById('essay-content');
+const charCount = document.getElementById('char-count');
 
 // Store extracted text
 let topicText = '';
-let essayText = '';
 
 // ===== Mobile Navigation =====
 hamburger.addEventListener('click', () => {
@@ -72,7 +69,13 @@ tabBtns.forEach(btn => {
     });
 });
 
-// ===== Drag and Drop =====
+// ===== Character Count =====
+essayContent.addEventListener('input', () => {
+    const count = essayContent.value.length;
+    charCount.textContent = count;
+});
+
+// ===== Drag and Drop for Topic PDF =====
 function setupDragDrop(uploadArea, fileInput) {
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         uploadArea.addEventListener(eventName, (e) => {
@@ -103,20 +106,12 @@ function setupDragDrop(uploadArea, fileInput) {
 }
 
 setupDragDrop(topicUploadArea, topicFileInput);
-setupDragDrop(essayUploadArea, essayFileInput);
 
-// ===== File Upload Handlers =====
+// ===== Topic File Upload Handler =====
 topicFileInput.addEventListener('change', async (e) => {
     const file = e.target.files[0];
     if (file) {
         await handleTopicFile(file);
-    }
-});
-
-essayFileInput.addEventListener('change', async (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        await handleEssayFile(file);
     }
 });
 
@@ -134,44 +129,11 @@ async function handleTopicFile(file) {
     `;
 
     if (file.type === 'application/pdf') {
-        topicText = await extractTextFromPDF(file);
-        topicContent.innerHTML = topicText || '<em style="color: var(--text-secondary);">（PDF 內容為圖片，無法提取文字）</em>';
+        const result = await extractTextFromPDF(file);
+        topicText = result.text;
+        topicContent.innerHTML = result.html || '<em style="color: var(--text-secondary);">（PDF 內容為圖片，無法提取文字，已渲染為圖片顯示）</em>';
     } else {
         topicContent.innerHTML = '<em style="color: var(--text-secondary);">請上傳 PDF 格式檔案</em>';
-    }
-}
-
-// ===== Handle Essay File =====
-async function handleEssayFile(file) {
-    essayFilename.textContent = file.name;
-    essayPreview.classList.remove('hidden');
-    essayUploadArea.style.display = 'none';
-
-    essayContentPreview.innerHTML = `
-        <div class="loading-spinner">
-            <div class="spinner"></div>
-            <span>正在讀取檔案...</span>
-        </div>
-    `;
-
-    if (file.type === 'application/pdf') {
-        essayText = await extractTextFromPDF(file);
-        if (essayText) {
-            essayContentPreview.innerHTML = essayText;
-        } else {
-            // If no text extracted, show PDF as image
-            const pdfImages = await renderPDFAsImages(file);
-            essayContentPreview.innerHTML = pdfImages;
-            essayText = '[PDF 圖片內容]';
-        }
-    } else if (file.type.startsWith('image/')) {
-        // Handle image files
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            essayContentPreview.innerHTML = `<img src="${e.target.result}" alt="學生作文" />`;
-            essayText = '[圖片內容]';
-        };
-        reader.readAsDataURL(file);
     }
 }
 
@@ -181,6 +143,7 @@ async function extractTextFromPDF(file) {
         const arrayBuffer = await file.arrayBuffer();
         const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
         let fullText = '';
+        let fullHtml = '';
 
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
@@ -188,17 +151,23 @@ async function extractTextFromPDF(file) {
             const pageText = textContent.items.map(item => item.str).join(' ');
 
             if (pageText.trim()) {
-                fullText += `<div class="pdf-page">
+                fullText += pageText + '\n';
+                fullHtml += `<div class="pdf-page">
                     <div class="page-number">第 ${i} 頁</div>
                     <div>${pageText}</div>
                 </div>`;
             }
         }
 
-        return fullText;
+        // If no text extracted, render as images
+        if (!fullText.trim()) {
+            fullHtml = await renderPDFAsImages(file);
+        }
+
+        return { text: fullText, html: fullHtml };
     } catch (error) {
         console.error('PDF 讀取錯誤:', error);
-        return '';
+        return { text: '', html: '' };
     }
 }
 
@@ -240,7 +209,7 @@ async function renderPDFAsImages(file) {
     }
 }
 
-// ===== Remove File Functions =====
+// ===== Remove Topic File =====
 function removeTopicFile() {
     topicFileInput.value = '';
     topicPreview.classList.add('hidden');
@@ -249,18 +218,11 @@ function removeTopicFile() {
     topicContent.innerHTML = '';
 }
 
-function removeEssayFile() {
-    essayFileInput.value = '';
-    essayPreview.classList.add('hidden');
-    essayUploadArea.style.display = 'block';
-    essayText = '';
-    essayContentPreview.innerHTML = '';
-}
-
 // ===== Clear Form =====
 function clearForm() {
     removeTopicFile();
-    removeEssayFile();
+    essayContent.value = '';
+    charCount.textContent = '0';
     resultSection.classList.add('hidden');
 }
 
@@ -279,14 +241,15 @@ gradingForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const examType = document.querySelector('input[name="exam-type"]:checked').value;
+    const essayText = essayContent.value.trim();
 
     if (!topicFileInput.files[0]) {
         alert('請上傳作文題目 PDF');
         return;
     }
 
-    if (!essayFileInput.files[0]) {
-        alert('請上傳學生作文檔案');
+    if (!essayText) {
+        alert('請輸入學生作文內容');
         return;
     }
 
@@ -298,6 +261,7 @@ gradingForm.addEventListener('submit', (e) => {
 // ===== Generate Grading Result =====
 function generateGradingResult(examType, topic, content) {
     const charLength = content.length;
+    const paragraphs = content.split(/\n\n+/).filter(p => p.trim()).length;
 
     const examNames = {
         'gsat-intellectual': '學測知性題',
@@ -309,30 +273,91 @@ function generateGradingResult(examType, topic, content) {
         examType: examNames[examType],
         topic: topic ? '已上傳題目 PDF' : '未提供',
         charCount: charLength,
+        paragraphCount: paragraphs,
         grade: '',
         score: 0,
         dimensions: {}
     };
 
-    // Scoring logic based on exam type
+    // Scoring logic based on exam type and content length
     if (examType === 'cap') {
-        analysis.grade = '4 級分';
-        analysis.score = 4;
-        analysis.dimensions = {
-            '立意取材': '尚能統整運用材料說明主旨',
-            '結構組織': '大致完整，偶有不連貫',
-            '遣詞造句': '文意尚清楚，有冗詞贅句',
-            '錯別字格式標點': '有一些錯誤'
-        };
+        // 會考六級分制
+        if (charLength >= 600 && paragraphs >= 4) {
+            analysis.grade = '5 級分';
+            analysis.score = 5;
+            analysis.dimensions = {
+                '立意取材': '能適當統整運用材料，闘述主旨',
+                '結構組織': '結構完整，偶有轉折不流暢',
+                '遣詞造句': '能正確使用語詞，文句通順',
+                '錯別字格式標點': '少有錯誤'
+            };
+        } else if (charLength >= 400 && paragraphs >= 3) {
+            analysis.grade = '4 級分';
+            analysis.score = 4;
+            analysis.dimensions = {
+                '立意取材': '尚能統整運用材料說明主旨',
+                '結構組織': '大致完整，偶有不連貫',
+                '遣詞造句': '文意尚清楚，有冗詞贅句',
+                '錯別字格式標點': '有一些錯誤'
+            };
+        } else if (charLength >= 200) {
+            analysis.grade = '3 級分';
+            analysis.score = 3;
+            analysis.dimensions = {
+                '立意取材': '材料運用不甚適當',
+                '結構組織': '結構鬆散',
+                '遣詞造句': '用詞不太恰當',
+                '錯別字格式標點': '有些錯誤造成理解困難'
+            };
+        } else {
+            analysis.grade = '2 級分';
+            analysis.score = 2;
+            analysis.dimensions = {
+                '立意取材': '發展有限',
+                '結構組織': '結構不完整',
+                '遣詞造句': '遣詞造句常有錯誤',
+                '錯別字格式標點': '錯別字頗多'
+            };
+        }
     } else {
-        analysis.grade = 'B+';
-        analysis.score = examType === 'gsat-emotional' ? 15 : 13;
-        analysis.dimensions = {
-            '立意取材': '6/10 - 論述尚稱適當',
-            '組織結構': '4.5/7.5 - 結構大致完整',
-            '遣詞造句': '4/6.25 - 文辭通順',
-            '標點錯字': '0.5/1.25 - 有些錯誤'
-        };
+        // 學測三等六級制
+        if (charLength >= 500 && paragraphs >= 4) {
+            analysis.grade = 'A';
+            analysis.score = examType === 'gsat-emotional' ? 20 : 17;
+            analysis.dimensions = {
+                '立意取材': '8/10 - 觀點明確，材料適切',
+                '組織結構': '6/7.5 - 結構完整，脈絡分明',
+                '遣詞造句': '5/6.25 - 文辭流暢',
+                '標點錯字': '1/1.25 - 少有錯誤'
+            };
+        } else if (charLength >= 300 && paragraphs >= 3) {
+            analysis.grade = 'B+';
+            analysis.score = examType === 'gsat-emotional' ? 15 : 13;
+            analysis.dimensions = {
+                '立意取材': '6/10 - 論述尚稱適當',
+                '組織結構': '4.5/7.5 - 結構大致完整',
+                '遣詞造句': '4/6.25 - 文辭通順',
+                '標點錯字': '0.5/1.25 - 有些錯誤'
+            };
+        } else if (charLength >= 150) {
+            analysis.grade = 'B';
+            analysis.score = examType === 'gsat-emotional' ? 12 : 10;
+            analysis.dimensions = {
+                '立意取材': '4/10 - 論述平平',
+                '組織結構': '3/7.5 - 結構尚可',
+                '遣詞造句': '2.5/6.25 - 文辭平順',
+                '標點錯字': '0.5/1.25 - 有些錯誤'
+            };
+        } else {
+            analysis.grade = 'C+';
+            analysis.score = examType === 'gsat-emotional' ? 8 : 6;
+            analysis.dimensions = {
+                '立意取材': '2/10 - 發展不足',
+                '組織結構': '2/7.5 - 結構鬆散',
+                '遣詞造句': '1.5/6.25 - 文辭欠通順',
+                '標點錯字': '0.5/1.25 - 錯誤較多'
+            };
+        }
     }
 
     return analysis;
@@ -350,6 +375,14 @@ function displayResult(analysis) {
             <tr>
                 <th>作文題目</th>
                 <td>${analysis.topic}</td>
+            </tr>
+            <tr>
+                <th>字數統計</th>
+                <td>${analysis.charCount} 字</td>
+            </tr>
+            <tr>
+                <th>段落數</th>
+                <td>${analysis.paragraphCount} 段</td>
             </tr>
         </table>
 
@@ -396,7 +429,7 @@ function displayResult(analysis) {
         </ul>
 
         <div style="margin-top: 2rem; padding: 1rem; background: #FEF3C7; border-radius: var(--radius-md); border-left: 4px solid #F59E0B;">
-            <strong>⚠️ 注意：</strong>此為系統初步分析結果，僅供參考。完整的 AI 批改功能需搭配後端服務使用。
+            <strong>⚠️ 注意：</strong>此為系統依據字數與段落的初步分析，僅供參考。完整的 AI 批改功能需搭配後端服務使用。
         </div>
     `;
 

@@ -8,6 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- PDF.js for reading PDF files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
     <!-- 導航列 -->
@@ -344,24 +346,51 @@
                     </div>
                 </div>
 
-                <!-- Step 2: 輸入題目 -->
+                <!-- Step 2: 上傳題目 PDF -->
                 <div class="form-step">
                     <div class="step-header">
                         <span class="step-number">2</span>
-                        <h3>輸入作文題目</h3>
+                        <h3>上傳作文題目 (PDF)</h3>
                     </div>
-                    <textarea id="essay-topic" class="form-textarea" rows="4" placeholder="請輸入作文題目或題目說明...&#10;&#10;例如：請以「那一次，我真的很感動」為題，寫一篇文章。"></textarea>
+                    <div class="file-upload-area" id="topic-upload-area">
+                        <input type="file" id="topic-file" accept=".pdf" class="file-input" />
+                        <label for="topic-file" class="file-label">
+                            <span class="upload-icon">📄</span>
+                            <span class="upload-text">點擊或拖曳上傳題目 PDF</span>
+                            <span class="upload-hint">支援 PDF 格式</span>
+                        </label>
+                    </div>
+                    <div id="topic-preview" class="file-preview hidden">
+                        <div class="preview-header">
+                            <span class="preview-icon">📋</span>
+                            <span class="preview-filename" id="topic-filename"></span>
+                            <button type="button" class="btn-remove" onclick="removeTopicFile()">✕</button>
+                        </div>
+                        <div class="preview-content" id="topic-content"></div>
+                    </div>
                 </div>
 
-                <!-- Step 3: 輸入作文 -->
+                <!-- Step 3: 上傳學生作文 PDF -->
                 <div class="form-step">
                     <div class="step-header">
                         <span class="step-number">3</span>
-                        <h3>輸入學生作文</h3>
+                        <h3>上傳學生作文 (PDF)</h3>
                     </div>
-                    <textarea id="essay-content" class="form-textarea" rows="12" placeholder="請輸入學生的作文內容..."></textarea>
-                    <div class="word-count">
-                        <span id="char-count">0</span> 字
+                    <div class="file-upload-area" id="essay-upload-area">
+                        <input type="file" id="essay-file" accept=".pdf,image/*" class="file-input" />
+                        <label for="essay-file" class="file-label">
+                            <span class="upload-icon">📝</span>
+                            <span class="upload-text">點擊或拖曳上傳學生作文</span>
+                            <span class="upload-hint">支援 PDF 或圖片格式</span>
+                        </label>
+                    </div>
+                    <div id="essay-preview" class="file-preview hidden">
+                        <div class="preview-header">
+                            <span class="preview-icon">📄</span>
+                            <span class="preview-filename" id="essay-filename"></span>
+                            <button type="button" class="btn-remove" onclick="removeEssayFile()">✕</button>
+                        </div>
+                        <div class="preview-content" id="essay-content-preview"></div>
                     </div>
                 </div>
 

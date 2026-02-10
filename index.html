@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>國寫批改助手 | 學測 & 會考作文評分系統</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 導航列 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-icon">📝</span>
+                <span class="logo-text">國寫批改助手</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active">首頁</a></li>
+                <li><a href="#standards" class="nav-link">評分規準</a></li>
+                <li><a href="#grading" class="nav-link">開始批改</a></li>
+                <li><a href="#about" class="nav-link">關於系統</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首頁區塊 -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>專業國寫自動批改與教學助手</h1>
+            <p>支援學測國寫（知性題/情意題）與國中會考作文評分</p>
+            <div class="hero-buttons">
+                <a href="#grading" class="btn btn-primary">開始批改</a>
+                <a href="#standards" class="btn btn-secondary">查看評分規準</a>
+            </div>
+        </div>
+        <div class="hero-cards">
+            <div class="feature-card">
+                <div class="card-icon">🎓</div>
+                <h3>學測國寫</h3>
+                <p>三等六級制<br>A+ ~ C</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-icon">📚</div>
+                <h3>會考作文</h3>
+                <p>六級分制<br>0 ~ 6 級分</p>
+            </div>
+            <div class="feature-card">
+                <div class="card-icon">✨</div>
+                <h3>專業批改</h3>
+                <p>四大面向<br>精準評分</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 評分規準區塊 -->
+    <section id="standards" class="standards-section">
+        <div class="container">
+            <h2 class="section-title">評分規準</h2>
+            <p class="section-subtitle">選擇考試類型查看詳細評分標準</p>
+
+            <!-- 評分類型選擇標籤 -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="gsat-intellectual">學測知性題</button>
+                <button class="tab-btn" data-tab="gsat-emotional">學測情意題</button>
+                <button class="tab-btn" data-tab="cap">會考作文</button>
+            </div>
+
+            <!-- 學測知性題 -->
+            <div id="gsat-intellectual" class="tab-content active">
+                <div class="standard-info">
+                    <div class="info-header">
+                        <h3>學測國寫 - 知性題</h3>
+                        <span class="badge">第一大題</span>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">測驗目標</span>
+                            <span class="value">知性統整判斷能力</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">配分</span>
+                            <span class="value">25 分</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">評分等級</span>
+                            <span class="value">三等六級（A+, A, B+, B, C+, C）</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">題型特色</span>
+                            <span class="value">重在觀點表達與邏輯推論</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="grading-table">
+                    <thead>
+                        <tr>
+                            <th>等第</th>
+                            <th>級分</th>
+                            <th>分數</th>
+                            <th>作答情形</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="grade-a">
+                            <td rowspan="2">A</td>
+                            <td>A+</td>
+                            <td>21-19</td>
+                            <td>論點明確，詮釋深入，結構嚴謹且具說服力，層次井然，文辭暢達</td>
+                        </tr>
+                        <tr class="grade-a">
+                            <td>A</td>
+                            <td>18-15</td>
+                            <td>結構允當，條理分明，文辭流暢</td>
+                        </tr>
+                        <tr class="grade-b">
+                            <td rowspan="2">B</td>
+                            <td>B+</td>
+                            <td>14-12</td>
+                            <td>論述尚稱適當，結構合宜，文辭通順</td>
+                        </tr>
+                        <tr class="grade-b">
+                            <td>B</td>
+                            <td>11-8</td>
+                            <td>論述平平，文辭尚稱通順</td>
+                        </tr>
+                        <tr class="grade-c">
+                            <td rowspan="2">C</td>
+                            <td>C+</td>
+                            <td>7-5</td>
+                            <td>觀點敘述不清，結構鬆散，文辭欠通順</td>
+                        </tr>
+                        <tr class="grade-c">
+                            <td>C</td>
+                            <td>4-1</td>
+                            <td>立論含糊，敘寫雜亂，文辭不通</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 學測情意題 -->
+            <div id="gsat-emotional" class="tab-content">
+                <div class="standard-info">
+                    <div class="info-header">
+                        <h3>學測國寫 - 情意題</h3>
+                        <span class="badge badge-purple">第二大題</span>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">測驗目標</span>
+                            <span class="value">情意感受抒發能力</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">配分</span>
+                            <span class="value">25 分</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">評分等級</span>
+                            <span class="value">三等六級（A+, A, B+, B, C+, C）</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">題型特色</span>
+                            <span class="value">重在情感抒發、細膩描寫</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="grading-table">
+                    <thead>
+                        <tr>
+                            <th>等第</th>
+                            <th>級分</th>
+                            <th>分數</th>
+                            <th>作答情形</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="grade-a">
+                            <td rowspan="2">A</td>
+                            <td>A+</td>
+                            <td>25-22</td>
+                            <td>結構嚴謹，文辭洗練，情感雋永</td>
+                        </tr>
+                        <tr class="grade-a">
+                            <td>A</td>
+                            <td>21-18</td>
+                            <td>結構完整，文辭暢達，情感深刻</td>
+                        </tr>
+                        <tr class="grade-b">
+                            <td rowspan="2">B</td>
+                            <td>B+</td>
+                            <td>17-14</td>
+                            <td>內容平實，情感合宜，結構清楚，文辭通順</td>
+                        </tr>
+                        <tr class="grade-b">
+                            <td>B</td>
+                            <td>13-10</td>
+                            <td>內容較欠深刻，結構尚可，文辭平順</td>
+                        </tr>
+                        <tr class="grade-c">
+                            <td rowspan="2">C</td>
+                            <td>C+</td>
+                            <td>9-6</td>
+                            <td>敘寫浮泛，結構鬆散，文辭欠通順</td>
+                        </tr>
+                        <tr class="grade-c">
+                            <td>C</td>
+                            <td>5-1</td>
+                            <td>敘寫雜亂，文句不通</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 會考作文 -->
+            <div id="cap" class="tab-content">
+                <div class="standard-info">
+                    <div class="info-header">
+                        <h3>國中教育會考 - 寫作測驗</h3>
+                        <span class="badge badge-green">六級分制</span>
+                    </div>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="label">測驗目標</span>
+                            <span class="value">評量國中畢業學生表達見聞與思想的能力</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">滿分</span>
+                            <span class="value">6 級分</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="label">評分面向</span>
+                            <span class="value">立意取材、結構組織、遣詞造句、錯別字格式標點</span>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="grading-table cap-table">
+                    <thead>
+                        <tr>
+                            <th>級分</th>
+                            <th>整體表現</th>
+                            <th>立意取材</th>
+                            <th>結構組織</th>
+                            <th>遣詞造句</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="grade-6">
+                            <td><span class="grade-badge">6</span></td>
+                            <td>優秀</td>
+                            <td>適切統整運用材料，凸顯主旨</td>
+                            <td>結構完整，脈絡分明</td>
+                            <td>精確使用語詞，文句流暢</td>
+                        </tr>
+                        <tr class="grade-5">
+                            <td><span class="grade-badge">5</span></td>
+                            <td>一般水準之上</td>
+                            <td>適當統整運用材料，闘述主旨</td>
+                            <td>結構完整，偶有不流暢</td>
+                            <td>正確使用語詞，文句通順</td>
+                        </tr>
+                        <tr class="grade-4">
+                            <td><span class="grade-badge">4</span></td>
+                            <td>一般水準</td>
+                            <td>尚能統整運用材料說明主旨</td>
+                            <td>大致完整，偶有不連貫</td>
+                            <td>文意尚清楚，有冗詞贅句</td>
+                        </tr>
+                        <tr class="grade-3">
+                            <td><span class="grade-badge">3</span></td>
+                            <td>表達不充分</td>
+                            <td>材料不甚適當，發展不充分</td>
+                            <td>結構鬆散，前後不連貫</td>
+                            <td>用詞不太恰當，有錯誤</td>
+                        </tr>
+                        <tr class="grade-2">
+                            <td><span class="grade-badge">2</span></td>
+                            <td>嚴重問題</td>
+                            <td>材料不足，大量引述題幹</td>
+                            <td>結構不完整</td>
+                            <td>遣詞造句常有錯誤</td>
+                        </tr>
+                        <tr class="grade-1">
+                            <td><span class="grade-badge">1</span></td>
+                            <td>極嚴重問題</td>
+                            <td>僅解釋題目，材料簡略</td>
+                            <td>無明顯結構</td>
+                            <td>文句支離破碎</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- 批改區塊 -->
+    <section id="grading" class="grading-section">
+        <div class="container">
+            <h2 class="section-title">開始批改</h2>
+            <p class="section-subtitle">選擇評分標準，輸入題目與作文內容</p>
+
+            <form id="grading-form" class="grading-form">
+                <!-- Step 1: 選擇評分標準 -->
+                <div class="form-step">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3>選擇評分標準</h3>
+                    </div>
+                    <div class="radio-group">
+                        <label class="radio-card">
+                            <input type="radio" name="exam-type" value="gsat-intellectual" checked>
+                            <div class="radio-content">
+                                <span class="radio-icon">🎓</span>
+                                <span class="radio-title">學測知性題</span>
+                                <span class="radio-desc">第一大題・統整判斷</span>
+                            </div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="exam-type" value="gsat-emotional">
+                            <div class="radio-content">
+                                <span class="radio-icon">💭</span>
+                                <span class="radio-title">學測情意題</span>
+                                <span class="radio-desc">第二大題・感受抒發</span>
+                            </div>
+                        </label>
+                        <label class="radio-card">
+                            <input type="radio" name="exam-type" value="cap">
+                            <div class="radio-content">
+                                <span class="radio-icon">📚</span>
+                                <span class="radio-title">會考作文</span>
+                                <span class="radio-desc">六級分制</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Step 2: 輸入題目 -->
+                <div class="form-step">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3>輸入作文題目</h3>
+                    </div>
+                    <textarea id="essay-topic" class="form-textarea" rows="4" placeholder="請輸入作文題目或題目說明...&#10;&#10;例如：請以「那一次，我真的很感動」為題，寫一篇文章。"></textarea>
+                </div>
+
+                <!-- Step 3: 輸入作文 -->
+                <div class="form-step">
+                    <div class="step-header">
+                        <span class="step-number">3</span>
+                        <h3>輸入學生作文</h3>
+                    </div>
+                    <textarea id="essay-content" class="form-textarea" rows="12" placeholder="請輸入學生的作文內容..."></textarea>
+                    <div class="word-count">
+                        <span id="char-count">0</span> 字
+                    </div>
+                </div>
+
+                <!-- 提交按鈕 -->
+                <div class="form-actions">
+                    <button type="button" class="btn btn-outline" onclick="clearForm()">清除內容</button>
+                    <button type="submit" class="btn btn-primary btn-large">
+                        <span class="btn-icon">✨</span>
+                        開始批改
+                    </button>
+                </div>
+            </form>
+
+            <!-- 批改結果區域 -->
+            <div id="result-section" class="result-section hidden">
+                <div class="result-header">
+                    <h3>📋 批改結果</h3>
+                    <button class="btn btn-outline btn-small" onclick="copyResult()">複製結果</button>
+                </div>
+                <div id="result-content" class="result-content">
+                    <!-- 結果將在這裡顯示 -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 四大評分面向 -->
+    <section id="dimensions" class="dimensions-section">
+        <div class="container">
+            <h2 class="section-title">四大評分面向</h2>
+            <p class="section-subtitle">無論學測或會考，作文評分皆依據以下四大面向</p>
+
+            <div class="dimensions-grid">
+                <div class="dimension-card">
+                    <div class="dimension-icon">💡</div>
+                    <h3>立意取材</h3>
+                    <div class="dimension-weight">權重 40%</div>
+                    <p>是否符合題意、觀點是否明確、論證是否深入、材料是否適切</p>
+                </div>
+                <div class="dimension-card">
+                    <div class="dimension-icon">🏗️</div>
+                    <h3>組織結構</h3>
+                    <div class="dimension-weight">權重 30%</div>
+                    <p>段落連結是否緊密、脈絡是否分明、前後是否連貫</p>
+                </div>
+                <div class="dimension-card">
+                    <div class="dimension-icon">✍️</div>
+                    <h3>遣詞造句</h3>
+                    <div class="dimension-weight">權重 25%</div>
+                    <p>文辭是否暢達、用詞是否精確、句型是否多變</p>
+                </div>
+                <div class="dimension-card">
+                    <div class="dimension-icon">🔤</div>
+                    <h3>標點錯字</h3>
+                    <div class="dimension-weight">權重 5%</div>
+                    <p>錯別字數量、標點符號運用、格式是否正確</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 關於系統 -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <h2 class="section-title">關於系統</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>專業的國語文寫作批改助手</h3>
+                    <p>本系統依據大考中心公布的《學測國寫閱卷評分原則》以及國中教育會考《寫作測驗評分規準》設計，提供標準化的評分參考。</p>
+                    <ul class="feature-list">
+                        <li>✅ 支援學測國寫（知性題/情意題）</li>
+                        <li>✅ 支援國中會考作文（六級分制）</li>
+                        <li>✅ 四大面向精準評分</li>
+                        <li>✅ 視覺化批改標記</li>
+                        <li>✅ 詳細評語與建議</li>
+                    </ul>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">評分面向</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">評分標準</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">6</span>
+                        <span class="stat-label">評分等級</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span class="logo-icon">📝</span>
+                    <span class="logo-text">國寫批改助手</span>
+                </div>
+                <p class="footer-text">專業國語文寫作評量系統</p>
+                <div class="footer-links">
+                    <a href="#standards">評分規準</a>
+                    <a href="#grading">開始批改</a>
+                    <a href="#about">關於系統</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 國寫批改助手. 評分標準依據大考中心及教育會考官方規準。</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
